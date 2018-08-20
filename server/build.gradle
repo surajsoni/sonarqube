@@ -1,0 +1,5 @@
+sonarqube {
+  skipProject = true
+}
+jar.enabled = false
+uploadArchives.enabled = false
