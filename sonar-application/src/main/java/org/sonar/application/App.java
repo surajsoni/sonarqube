@@ -42,36 +42,40 @@ public class App {
 
   public void start(String[] cliArguments) throws IOException {
     AppSettingsLoader settingsLoader = new AppSettingsLoaderImpl(cliArguments);
-    AppSettings settings = settingsLoader.load();
-    // order is important - logging must be configured before any other components (AppFileSystem, ...)
-    AppLogging logging = new AppLogging(settings);
-    logging.configure();
-    AppFileSystem fileSystem = new AppFileSystem(settings);
 
-    try (AppState appState = new AppStateFactory(settings).create()) {
-      appState.registerSonarQubeVersion(getSonarqubeVersion());
-      appState.registerClusterName(settings.getProps().nonNullValue(CLUSTER_NAME.getKey()));
-      AppReloader appReloader = new AppReloaderImpl(settingsLoader, fileSystem, appState, logging);
-      fileSystem.reset();
-      CommandFactory commandFactory = new CommandFactoryImpl(settings.getProps(), fileSystem.getTempDir(), System2.INSTANCE);
+    if (true) {
+      AppSettings settings = settingsLoader.load();
+      // order is important - logging must be configured before any other components (AppFileSystem, ...)
+      AppLogging logging = new AppLogging(settings);
+      logging.configure();
+      AppFileSystem fileSystem = new AppFileSystem(settings);
 
-      try (ProcessLauncher processLauncher = new ProcessLauncherImpl(fileSystem.getTempDir())) {
-        Scheduler scheduler = new SchedulerImpl(settings, appReloader, commandFactory, processLauncher, appState);
+      try (AppState appState = new AppStateFactory(settings).create()) {
+        appState.registerSonarQubeVersion(getSonarqubeVersion());
+        appState.registerClusterName(settings.getProps().nonNullValue(CLUSTER_NAME.getKey()));
+        AppReloader appReloader = new AppReloaderImpl(settingsLoader, fileSystem, appState, logging);
+        fileSystem.reset();
+        CommandFactory commandFactory = new CommandFactoryImpl(settings.getProps(), fileSystem.getTempDir(), System2.INSTANCE);
 
-        // intercepts CTRL-C
-        Runtime.getRuntime().addShutdownHook(new ShutdownHook(scheduler));
+        try (ProcessLauncher processLauncher = new ProcessLauncherImpl(fileSystem.getTempDir())) {
+          Scheduler scheduler = new SchedulerImpl(settings, appReloader, commandFactory, processLauncher, appState);
 
-        scheduler.schedule();
+          // intercepts CTRL-C
+          Runtime.getRuntime().addShutdownHook(new ShutdownHook(scheduler));
 
-        stopRequestWatcher = StopRequestWatcherImpl.create(settings, scheduler, fileSystem);
-        stopRequestWatcher.startWatching();
+          scheduler.schedule();
 
-        scheduler.awaitTermination();
-        stopRequestWatcher.stopWatching();
+          stopRequestWatcher = StopRequestWatcherImpl.create(settings, scheduler, fileSystem);
+          stopRequestWatcher.startWatching();
+
+          scheduler.awaitTermination();
+          stopRequestWatcher.stopWatching();
+        }
       }
+
+      systemExit.exit(0);
     }
 
-    systemExit.exit(0);
   }
 
   public static void main(String... args) throws IOException {
