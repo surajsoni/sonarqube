@@ -67,8 +67,11 @@ public class App {
           stopRequestWatcher = StopRequestWatcherImpl.create(settings, scheduler, fileSystem);
           stopRequestWatcher.startWatching();
 
-          scheduler.awaitTermination();
-          stopRequestWatcher.stopWatching();
+          if (true) {
+
+            scheduler.awaitTermination();
+            stopRequestWatcher.stopWatching();
+          }
         }
       }
 
