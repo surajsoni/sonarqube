@@ -3,7 +3,7 @@ gcp_credentials: ENCRYPTED[9cf993f6cc2ab666aa2d428185257608d065f6468146aaa26d6d2
 task:
   name: build
   gke_container:
-    image: gradle:jdk8
+    image: gradle:4.9.0-jdk8
     cluster_name: cirrus-ci-cluster
     zone: us-central1-a
     namespace: default
