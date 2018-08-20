@@ -7,7 +7,7 @@ task:
     cluster_name: cirrus-ci-cluster
     zone: us-central1-a
     namespace: default
-    cpu: 4
+    cpu: 3
     memory: 10Gb
   gradle_cache:
     folder: ~/.gradle/caches
