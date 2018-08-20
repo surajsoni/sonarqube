@@ -7,14 +7,14 @@ task:
     cluster_name: cirrus-ci-cluster
     zone: us-central1-a
     namespace: default
-    cpu: 3
+    cpu: 4
     memory: 10Gb
   gradle_cache:
     folder: ~/.gradle/caches
   script:
     - printenv
     - chmod -R u+w ~/.gradle/caches
-    - gradle build --no-daemon --build-cache
+    - gradle build --no-daemon --build-cache --parallel
   cleanup_before_cache_script:
     - rm -rf ~/.gradle/caches/$GRADLE_VERSION/
     - find ~/.gradle/caches/ -name "*.lock" -type f -delete
