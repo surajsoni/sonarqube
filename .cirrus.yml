@@ -1,4 +1,4 @@
-gcp_credentials: ENCRYPTED[aabbddee91d576d562b1b3f3ff9f1b2d7651ec3918dfd92432faeb77cc97a11e0534da4d52d0bcc897cf4dff230c072e]
+gcp_credentials: ENCRYPTED[9cf993f6cc2ab666aa2d428185257608d065f6468146aaa26d6d2f31e88ed8045d7dd615cd5c7c83d7bcf12578762869]
 
 task:
   name: build
