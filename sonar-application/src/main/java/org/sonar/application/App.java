@@ -43,7 +43,6 @@ public class App {
   public void start(String[] cliArguments) throws IOException {
     AppSettingsLoader settingsLoader = new AppSettingsLoaderImpl(cliArguments);
 
-    if (true) {
       AppSettings settings = settingsLoader.load();
       // order is important - logging must be configured before any other components (AppFileSystem, ...)
       AppLogging logging = new AppLogging(settings);
@@ -74,7 +73,6 @@ public class App {
       }
 
       systemExit.exit(0);
-    }
 
   }
 
