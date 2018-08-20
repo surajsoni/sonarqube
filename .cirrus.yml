@@ -1,0 +1,14 @@
+gcp_credentials: ENCRYPTED[aabbddee91d576d562b1b3f3ff9f1b2d7651ec3918dfd92432faeb77cc97a11e0534da4d52d0bcc897cf4dff230c072e]
+
+task:
+  name: build
+  gke_container:
+    image: gradle:jdk8
+    cluster_name: cirrus-ci-cluster
+    zone: us-central1-a
+    namespace: default
+    cpu: 3
+    memory: 10Gb
+  script:
+    - printenv
+    - gradle build --no-daemon
